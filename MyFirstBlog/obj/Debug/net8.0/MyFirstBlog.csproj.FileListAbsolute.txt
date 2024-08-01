@@ -15,7 +15,6 @@ C:\Users\footb\source\repos\MyFirstBlog\MyFirstBlog\bin\Debug\net8.0\MyFirstBlog
 C:\Users\footb\source\repos\MyFirstBlog\MyFirstBlog\bin\Debug\net8.0\Azure.Core.dll
 C:\Users\footb\source\repos\MyFirstBlog\MyFirstBlog\bin\Debug\net8.0\Azure.Identity.dll
 C:\Users\footb\source\repos\MyFirstBlog\MyFirstBlog\bin\Debug\net8.0\Humanizer.dll
-C:\Users\footb\source\repos\MyFirstBlog\MyFirstBlog\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\footb\source\repos\MyFirstBlog\MyFirstBlog\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\footb\source\repos\MyFirstBlog\MyFirstBlog\bin\Debug\net8.0\Microsoft.CodeAnalysis.dll
 C:\Users\footb\source\repos\MyFirstBlog\MyFirstBlog\bin\Debug\net8.0\Microsoft.CodeAnalysis.CSharp.dll
@@ -136,3 +135,10 @@ C:\Users\footb\source\repos\MyFirstBlog\MyFirstBlog\obj\Debug\net8.0\refint\MyFi
 C:\Users\footb\source\repos\MyFirstBlog\MyFirstBlog\obj\Debug\net8.0\MyFirstBlog.pdb
 C:\Users\footb\source\repos\MyFirstBlog\MyFirstBlog\obj\Debug\net8.0\MyFirstBlog.genruntimeconfig.cache
 C:\Users\footb\source\repos\MyFirstBlog\MyFirstBlog\obj\Debug\net8.0\ref\MyFirstBlog.dll
+C:\Users\footb\source\repos\MyFirstBlog\MyFirstBlog\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\footb\source\repos\MyFirstBlog\MyFirstBlog\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\footb\source\repos\MyFirstBlog\MyFirstBlog\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\footb\source\repos\MyFirstBlog\MyFirstBlog\bin\Debug\net8.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\footb\source\repos\MyFirstBlog\MyFirstBlog\bin\Debug\net8.0\Microsoft.Extensions.Identity.Stores.dll
+C:\Users\footb\source\repos\MyFirstBlog\MyFirstBlog\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
+C:\Users\footb\source\repos\MyFirstBlog\MyFirstBlog\obj\Debug\net8.0\MyFirstBlog.sourcelink.json
