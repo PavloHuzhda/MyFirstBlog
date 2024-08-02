@@ -5,6 +5,6 @@ namespace MyFirstBlog.Models
 {
     public class BlogContext(DbContextOptions<BlogContext> options) : IdentityDbContext<User>(options)
     {
-        DbSet<BlogPost> BlogPosts {  get; set; }
+        public DbSet<BlogPost> BlogPosts {  get; set; }
     }
 }

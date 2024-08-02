@@ -22,3 +22,13 @@ C:\Users\footb\source\repos\MyFirstBlog\bin\Debug\MyFirstBlog.pdb
 C:\Users\footb\source\repos\MyFirstBlog\obj\Debug\docker-compose.dcproj.AssemblyReference.cache
 C:\Users\footb\source\repos\MyFirstBlog\obj\Debug\docker-compose.dcproj.CoreCompileInputs.cache
 C:\Users\footb\source\repos\MyFirstBlog\obj\Debug\docker-c.35A3FFBA.Up2Date
+C:\Users\footb\source\repos\MyFirstBlog\bin\Debug\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\footb\source\repos\MyFirstBlog\bin\Debug\Microsoft.IdentityModel.Tokens.dll
+C:\Users\footb\source\repos\MyFirstBlog\bin\Debug\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\footb\source\repos\MyFirstBlog\bin\Debug\Npgsql.EntityFrameworkCore.PostgreSQL.dll
+C:\Users\footb\source\repos\MyFirstBlog\bin\Debug\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\footb\source\repos\MyFirstBlog\bin\Debug\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\footb\source\repos\MyFirstBlog\bin\Debug\Microsoft.IdentityModel.Protocols.dll
+C:\Users\footb\source\repos\MyFirstBlog\bin\Debug\Microsoft.IdentityModel.Logging.dll
+C:\Users\footb\source\repos\MyFirstBlog\bin\Debug\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\footb\source\repos\MyFirstBlog\bin\Debug\Npgsql.dll
