@@ -45,14 +45,35 @@ namespace MyFirstBlog.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginModel loginModel) 
         {
-            var result = await _signInManager.PasswordSignInAsync(loginModel.Email, loginModel.Password, false, false);
+            //var result = await _signInManager.PasswordSignInAsync(loginModel.Email, loginModel.Password, false, false);
 
-            if (result.Succeeded) 
+            //if (result.Succeeded)
+            //{
+            //    var user = await _userManager.FindByEmailAsync(loginModel.Email);
+            //    var token = GenerateJwtToken(user);
+
+            //    return Ok(new { Token = token });
+            //}
+
+            var user = await _userManager.FindByEmailAsync(loginModel.Email);
+            if (user != null && await _userManager.CheckPasswordAsync(user, loginModel.Password))
             {
-                var user = await _userManager.FindByEmailAsync(loginModel.Email);
-                var token = GenerateJwtToken(user);
-
-                return Ok(new { Token = token });
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes(_config["Jwt:Key"]);
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(new Claim[]
+                    {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.UserName)
+                    }),
+                    Expires = DateTime.UtcNow.AddHours(1),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                    Issuer = _config["Jwt:Issuer"],
+                    Audience = _config["Jwt:Issuer"]
+                };
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                return Ok(new { Token = tokenHandler.WriteToken(token) });
             }
 
             return Unauthorized();

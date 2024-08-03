@@ -21,9 +21,23 @@ namespace MyFirstBlog.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BlogPost>>> GetBlogPosts() 
+        public async Task<ActionResult<IEnumerable<BlogPost>>> GetBlogPosts(int pageNum = 1, int pageSize = 3) 
         {
-            return await _blogContext.BlogPosts.ToListAsync();
+            var pagedBlogPosts = await _blogContext.BlogPosts
+                .Skip((pageNum - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var totalPosts = await _blogContext.BlogPosts.CountAsync();
+
+            var response = new PagedModel<BlogPost>
+            {
+                Data = pagedBlogPosts,
+                PageNumber = pageNum,
+                PageSize = pageSize,
+                TotalCount = totalPosts
+            };
+            return Ok(response);
         }
 
         [HttpGet("{id}")]
@@ -41,17 +55,31 @@ namespace MyFirstBlog.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<BlogPost>> CreateBlogPost(BlogPost blogPost) 
+        public async Task<ActionResult<BlogPost>> CreateBlogPost(PostBlog postBlog) 
         {
             var user = await _userManager.GetUserAsync(User);
-            blogPost.IdUser = user.Id;
-            blogPost.User = user;
-            blogPost.CreatedDate = DateTime.UtcNow;
+            var newPost = new BlogPost { Title = postBlog.Title, Content = postBlog.Content, CreatedDate = postBlog.CreatedAt, User = user, IdUser = user.Id };
+            //blogPost.IdUser = user.Id;
+            //blogPost.User = user;
+            //blogPost.CreatedDate = DateTime.UtcNow;
 
-            _blogContext.BlogPosts.Add(blogPost);
-            await _blogContext.SaveChangesAsync();
+            //_blogContext.BlogPosts.Add(blogPost);
+            //await _blogContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetBlogPost), new {id = blogPost.Id}, blogPost);
+            //return CreatedAtAction(nameof(GetBlogPost), new {id = blogPost.Id}, blogPost);
+
+            try
+            {
+                _blogContext.BlogPosts.Add(newPost);
+                await _blogContext.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(GetBlogPost), new { id = newPost.Id }, newPost);
+            }
+            catch (Exception ex)
+            {
+                
+                return StatusCode(500, ex);
+            }
         }
 
         [HttpPut("{id}")]
