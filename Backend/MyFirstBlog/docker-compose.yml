@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  myfirstblog:
+    image: ${DOCKER_REGISTRY-}myfirstblog
+    build:
+      context: .
+      dockerfile: MyFirstBlog/Dockerfile
+  db:
+    container_name: dbMyFirstBlog
+    image: postgres:16.3
+    restart: always
+    ports:  
+      - "5432:5432"
+    # set shared memory limit when using docker-compose
+    #shm_size: 128mb
+    # or set shared memory limit when deploy via swarm stack
+    #volumes: 
+     #- "/var/lib/postgresql/data"
+    #  - type: tmpfs
+         #/var/lib/postgresql/data 
+    #    tmpfs:
+    #      size: 134217728 # 128*2^20 bytes = 128Mb
+    environment:
+      - POSTGRES_DB=my_blog
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes: 
+      - ./.containers/notes-db:/var/lib/postgresql/data   
