@@ -44,14 +44,35 @@ namespace MyFirstBlog
 
             builder.Services.AddAuthorization();
 
+            //builder.Services.AddCors(options =>
+            //{
+            //    options.AddPolicy("AllowAll",
+            //        builder => builder
+            //            .AllowAnyOrigin()
+            //            .AllowAnyHeader()
+            //            .AllowAnyMethod());
+            //});
+
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowAll",
+                options.AddPolicy("AllowSpecificOrigin",
                     builder => builder
-                        .AllowAnyOrigin()
+                        .WithOrigins("http://localhost:5173") // Add your frontend URL here
                         .AllowAnyHeader()
-                        .AllowAnyMethod());
+                        .AllowAnyMethod()
+                        .AllowCredentials());
             });
+
+            //builder.Services.AddCors(options =>
+            //{
+            //    options.AddDefaultPolicy(policy =>
+            //    {
+            //        policy.WithOrigins("http://localhost:5173");
+            //        policy.AllowAnyHeader();
+            //        policy.AllowAnyMethod();
+            //    });
+            //});
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>

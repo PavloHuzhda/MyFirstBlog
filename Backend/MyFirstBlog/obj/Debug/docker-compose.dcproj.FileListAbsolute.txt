@@ -32,3 +32,4 @@ C:\Users\footb\source\repos\MyFirstBlog\bin\Debug\Microsoft.IdentityModel.Protoc
 C:\Users\footb\source\repos\MyFirstBlog\bin\Debug\Microsoft.IdentityModel.Logging.dll
 C:\Users\footb\source\repos\MyFirstBlog\bin\Debug\Microsoft.IdentityModel.Abstractions.dll
 C:\Users\footb\source\repos\MyFirstBlog\bin\Debug\Npgsql.dll
+C:\Users\footb\source\repos\MyFirstBlog\Backend\MyFirstBlog\obj\Debug\docker-compose.dcproj.CoreCompileInputs.cache
