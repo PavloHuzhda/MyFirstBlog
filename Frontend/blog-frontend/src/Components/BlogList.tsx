@@ -16,7 +16,7 @@ const BlogList: React.FC = () => {
   useEffect(() => {
     const fetchBlogPosts = async () => {
       try {
-        const response = await axios.get<{ data: BlogPost[] }>('https://localhost:7046/api/blog');
+        const response = await axios.get<{ data: BlogPost[] }>('/api/blog');
         console.log("Fetched blog posts:", response.data);
         if (Array.isArray(response.data.data)) {
           setBlogPosts(response.data.data);
