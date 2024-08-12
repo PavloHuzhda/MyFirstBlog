@@ -1,37 +1,37 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import React, { createContext, useContext, useState } from 'react';
 
 interface AuthContextType {
-    token: string | null;
-    setToken: (token: string | null) => void;
-    isAuthenticated: boolean;
+  isAuthenticated: boolean;
+  login: (token: string) => void;
+  logout: () => void;
 }
 
-const AuthContext = createContext<AuthContextType |undefined>(undefined);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!localStorage.getItem('token'));
 
-    const value = {
-        token,
-        setToken: (newToken: string | null) => {
-            if (newToken){
-                localStorage.setItem('token', newToken);
-            } else {
-                localStorage.removeItem('token');
-            }
-            setToken(newToken);
-        },
-        isAuthenticated: !!token,
-    };
+  const login = (token: string) => {
+    localStorage.setItem('token', token);
+    setIsAuthenticated(true);
+  };
 
-    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  const logout = () => {
+    localStorage.removeItem('token');
+    setIsAuthenticated(false);
+  };
 
+  return (
+    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuth = (): AuthContextType => {
-    const context = useContext(AuthContext);
-    if (context === undefined) {
-        throw new Error('useAuth must be used within an AuthProvider');
-    }
-    return context;
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 };
