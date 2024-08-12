@@ -8,7 +8,7 @@ import ProtectedRoute from './Components/ProtectedRoute';
 import { AuthProvider } from './Contexts/AuthContext';
 import Footer from './Components/Footer';
 import Logout from './Components/Logout';
-import PublicRoute from './Components/PublicRoute ';
+import PublicRoute from './Components/PublicRoute';
 
 const App: React.FC = () => {
   return (
