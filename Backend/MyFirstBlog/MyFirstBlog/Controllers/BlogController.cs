@@ -7,6 +7,7 @@ using MyFirstBlog.Models;
 
 namespace MyFirstBlog.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class BlogController : ControllerBase
@@ -20,15 +21,19 @@ namespace MyFirstBlog.Controllers
             _userManager = userManager;            
         }
 
-        [HttpGet]
+        [HttpGet]        
         public async Task<ActionResult<IEnumerable<BlogPost>>> GetBlogPosts(int pageNum = 1, int pageSize = 3) 
         {
+            var user = await _userManager.GetUserAsync(User);
             var pagedBlogPosts = await _blogContext.BlogPosts
+                .Where(post => post.IdUser == user.Id) // Filter by user ID
                 .Skip((pageNum - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
-            var totalPosts = await _blogContext.BlogPosts.CountAsync();
+            var totalPosts = await _blogContext.BlogPosts
+                .Where(post => post.IdUser == user.Id) // Filter by user ID
+                .CountAsync();
 
             var response = new PagedModel<BlogPost>
             {
@@ -54,20 +59,11 @@ namespace MyFirstBlog.Controllers
         }
 
         [HttpPost]
-        [Authorize]
-        public async Task<ActionResult<BlogPost>> CreateBlogPost(PostBlog postBlog) 
+        public async Task<ActionResult<BlogPost>> CreateBlogPost([FromBody] PostBlog postBlog) 
         {
             var user = await _userManager.GetUserAsync(User);
             var newPost = new BlogPost { Title = postBlog.Title, Content = postBlog.Content, CreatedDate = postBlog.CreatedAt, User = user, IdUser = user.Id };
-            //blogPost.IdUser = user.Id;
-            //blogPost.User = user;
-            //blogPost.CreatedDate = DateTime.UtcNow;
-
-            //_blogContext.BlogPosts.Add(blogPost);
-            //await _blogContext.SaveChangesAsync();
-
-            //return CreatedAtAction(nameof(GetBlogPost), new {id = blogPost.Id}, blogPost);
-
+            
             try
             {
                 _blogContext.BlogPosts.Add(newPost);
@@ -83,20 +79,30 @@ namespace MyFirstBlog.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize]
-        public async Task<IActionResult> UpdateBlogPost(Guid blogPostId, BlogPost updatePostBlog) 
+        public async Task<IActionResult> UpdateBlogPost(Guid id, [FromBody] UpdatePostBlog updatePostBlog)
         {
-            if(blogPostId != updatePostBlog.Id) 
+            if (id != updatePostBlog.Id)
             {
-                return BadRequest();
+                return BadRequest("Blog post ID in URL does not match ID in request body.");
             }
-            
-            var user = await _userManager.GetUserAsync(User);
-            var blogPost = await _blogContext.BlogPosts.FindAsync(blogPostId);
 
-            if (blogPost == null) { return NotFound(); }
+            var user = await _userManager.GetUserAsync(User); // Get the authenticated user
+            if (user == null)
+            {
+                return Unauthorized("You must be logged in to update a blog post.");
+            }
 
-            if (blogPost.IdUser != user.Id) { return Forbid(); }
+            var blogPost = await _blogContext.BlogPosts.FindAsync(id);
+
+            if (blogPost == null)
+            {
+                return NotFound("Blog post not found.");
+            }
+
+            if (blogPost.IdUser != user.Id)
+            {
+                return Forbid("You do not have permission to update this blog post.");
+            }
 
             blogPost.Title = updatePostBlog.Title;
             blogPost.Content = updatePostBlog.Content;
@@ -107,14 +113,19 @@ namespace MyFirstBlog.Controllers
             {
                 await _blogContext.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException) 
+            catch (DbUpdateConcurrencyException)
             {
-                if (!BlogPostExists(blogPostId)) { return NotFound(); }
-                else { throw; }
+                if (!BlogPostExists(id))
+                {
+                    return NotFound("Blog post not found during update.");
+                }
+                else
+                {
+                    throw;
+                }
             }
 
             return NoContent();
-
         }
 
         private bool BlogPostExists(Guid blogId) 
@@ -123,7 +134,6 @@ namespace MyFirstBlog.Controllers
         }
 
         [HttpDelete]
-        [Authorize]
         public async Task<IActionResult> DeleteBlogPost(Guid postId)
         {
             var user = await _userManager.GetUserAsync(User);

@@ -14,6 +14,7 @@ const SignupPaper = styled(Paper)({
 const Register: React.FC = () => {
     const [firstName, setFirstName] = useState<string>('');
     const [lastName, setLastName] = useState<string>('');
+    const [userName, setUserName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [termsAccepted, setTermsAccepted] = useState<boolean>(false);
@@ -30,12 +31,37 @@ const Register: React.FC = () => {
         }
 
         try {
-            const response = await axios.post('/api/account/register', { firstName, lastName, email, password });
+            const response = await axios.post('/api/account/register', {
+                firstName,
+                lastName,
+                userName,
+                email,
+                password,
+              }, {
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              }
+            );
+            console.log(response);
             console.log('Registration successful', response.data);
             navigate('/login'); // Redirect to home after successful login
         } catch (error) {
-            console.error('Registration failed', error);
-            setError('Registration failed. Please try again.');
+            if (axios.isAxiosError(error)) {
+                // Axios-specific error handling
+                if (error.response && error.response.data && Array.isArray(error.response.data)) {
+                    const messages = error.response.data.map((err: any) => err.description).join(' ');
+                    setError(messages);
+                } else {
+                    console.error('Registration failed', error.response?.data);
+                    setError(error.response?.data.message || 'Registration failed. Please try again.');
+                    // setError('Registration failed. Please try again.');
+                }
+            } else {
+                // Generic error handling
+                console.error('Registration failed', error);
+                setError('An unexpected error occurred. Please try again.');
+            }           
         }
     };
 
@@ -83,6 +109,17 @@ const Register: React.FC = () => {
                             required 
                             value={lastName} 
                             onChange={(e) => setLastName(e.target.value)}
+                        />
+                        <TextField 
+                            id="username" 
+                            label="UserName" 
+                            variant="standard" 
+                            placeholder="Enter your UserName" 
+                            fullWidth 
+                            autoComplete="username" 
+                            required 
+                            value={userName} 
+                            onChange={(e) => setUserName(e.target.value)}
                         />
                         <TextField 
                             id="email" 

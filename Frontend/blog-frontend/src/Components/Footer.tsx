@@ -17,7 +17,7 @@ function Copyright() {
 }
 
 const Footer: React.FC = () => {
-  const { isAuthenticated } = useAuth();
+  const { token } = useAuth();
 
   return (
     <Box
@@ -36,7 +36,7 @@ const Footer: React.FC = () => {
         <Typography variant="body1">
           My sticky footer can be found here.
         </Typography>
-        {isAuthenticated && (
+        {token && (
           <Link component={RouterLink} to="/logout" color="inherit">
             Logout
           </Link>

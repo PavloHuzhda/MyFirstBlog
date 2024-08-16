@@ -1,5 +1,6 @@
 import { AppBar, Box, Button, InputBase, Menu, MenuItem, styled, Toolbar } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
+import { Link } from 'react-router-dom';
 import { useState } from "react";
 
 
@@ -28,10 +29,10 @@ export const Header: React.FC = () => {
     });
 
     const MenuItems = [
-        {Name: "Home", Link: "#"},
-        {Name: "Logout", Link: "#"},
-        {Name: "Register", Link: "#"},
-        {Name: "Login", Link: "/login"},
+        { Name: "Home", Link: "/" },
+        { Name: "Logout", Link: "/logout" },
+        { Name: "Register", Link: "/register" },
+        { Name: "Login", Link: "/login" },
     ];
 
     const [open, setOpen] = useState(false);
@@ -39,29 +40,38 @@ export const Header: React.FC = () => {
     return (
         <AppBar sx={{ background: "black" }}>
             <StyledToolbar>
-                <LogoBox><Button href="/blogs" sx={{color: "white"}} >MyBlog</Button></LogoBox>
-                <MenuBox sx={{display: { xs: 'none', sm: 'none', md: 'flex'}}}>
-                    {MenuItems.map((item)=>(
-                        <Button variant="text" href={item.Link} key={item.Name} sx={{
-                            color:'white',
-                            '&:hover': {
-                            backgroundColor: '#757575',
-                        },
-                        }}>{item.Name}</Button>
+                <LogoBox>
+                    <Button component={Link} to="/blogs" sx={{ color: "white" }}>MyBlog</Button>
+                </LogoBox>
+                <MenuBox sx={{ display: { xs: 'none', sm: 'none', md: 'flex' } }}>
+                    {MenuItems.map((item) => (
+                        <Button 
+                            key={item.Name} 
+                            component={Link} 
+                            to={item.Link} 
+                            sx={{
+                                color: 'white',
+                                '&:hover': {
+                                    backgroundColor: '#757575',
+                                },
+                            }}
+                        >
+                            {item.Name}
+                        </Button>
                     ))}
-                    
+
                 </MenuBox>
                 <SearchBox>
-                    <InputBase placeholder="Search ...." sx={{color: 'white'}}/>
-                    <MenuIcon 
+                    <InputBase placeholder="Search ...." sx={{ color: 'white' }} />
+                    <MenuIcon
                         sx={{
-                            cursor:"pointer",
-                            color: 'white', 
-                            display: { xs: 'block', sm: 'block', md: 'none'}
+                            cursor: "pointer",
+                            color: 'white',
+                            display: { xs: 'block', sm: 'block', md: 'none' }
                         }}
-                        onClick={() => setOpen(!open)} 
+                        onClick={() => setOpen(!open)}
                     />
-                </SearchBox>                
+                </SearchBox>
             </StyledToolbar>
             <Menu
                 id="demo-positioned-menu"
@@ -69,19 +79,26 @@ export const Header: React.FC = () => {
                 open={open}
                 onClose={() => setOpen(!open)}
                 anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                    vertical: 'top',
+                    horizontal: 'right',
                 }}
                 transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
+                    vertical: 'top',
+                    horizontal: 'left',
                 }}
             >
-                <Box sx={{ width:350, height:'90vh' }}>
-                    {MenuItems.map((item)=>(
-                            <MenuItem href={item.Link} key={item.Name} sx={{cursor:"pointer"}} >{item.Name}</MenuItem>
-                        ))}
-                    <Button href="/login" sx={{variant: 'outlined'}} >LogButt</Button>
+                <Box sx={{ width: 350, height: '90vh' }}>
+                    {MenuItems.map((item) => (
+                        <MenuItem 
+                            key={item.Name} 
+                            component={Link} 
+                            to={item.Link} 
+                            sx={{ cursor: "pointer" }}
+                        >
+                            {item.Name}
+                        </MenuItem>
+                    ))}
+                    <Button component={Link} to="/login" sx={{ variant: 'outlined' }}>LogButt</Button>
                 </Box>
             </Menu>
         </AppBar>

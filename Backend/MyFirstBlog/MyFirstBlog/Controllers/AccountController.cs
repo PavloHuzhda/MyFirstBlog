@@ -31,7 +31,7 @@ namespace MyFirstBlog.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel registerModel)
         {
-            var user = new User { UserName = registerModel.Email, Email = registerModel.Email, FirstName = registerModel.FirstName, LastName = registerModel.LastName };
+            var user = new User { UserName = registerModel.UserName, Email = registerModel.Email, FirstName = registerModel.FirstName, LastName = registerModel.LastName };
             var result = await _userManager.CreateAsync(user, registerModel.Password);
 
             if (result.Succeeded)
