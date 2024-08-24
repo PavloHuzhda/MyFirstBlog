@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MyFirstBlog.Models;
+using MyFirstBlog.Services;
 using System.Text;
 
 namespace MyFirstBlog
@@ -23,6 +24,7 @@ namespace MyFirstBlog
                 .AddDefaultTokenProviders();
 
             builder.Services.AddControllers();
+            builder.Services.AddSingleton<IEmailService, EmailService>();
 
             builder.Services.AddAuthentication(options =>
             {
@@ -92,9 +94,9 @@ namespace MyFirstBlog
                 c.AddSecurityDefinition("Bearer", securitySchema);
 
                 var securityRequirement = new OpenApiSecurityRequirement
-    {
-        { securitySchema, new[] { "Bearer" } }
-    };
+                {
+                    { securitySchema, new[] { "Bearer" } }
+                };
 
                 c.AddSecurityRequirement(securityRequirement);
             });

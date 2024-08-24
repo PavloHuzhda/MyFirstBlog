@@ -19,6 +19,7 @@ const Register: React.FC = () => {
     const [password, setPassword] = useState<string>('');
     const [termsAccepted, setTermsAccepted] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
+    const [message, setMessage] = useState('');
     const navigate = useNavigate();
 
     const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -43,10 +44,12 @@ const Register: React.FC = () => {
                 }
               }
             );
+            setMessage('Registration successful. Please check your email to confirm your account.');
             console.log(response);
             console.log('Registration successful', response.data);
-            navigate('/login'); // Redirect to home after successful login
+            // navigate('/login'); // Redirect to home after successful login
         } catch (error) {
+            setMessage('Error during registration. Please try again.');
             if (axios.isAxiosError(error)) {
                 // Axios-specific error handling
                 if (error.response && error.response.data && Array.isArray(error.response.data)) {
@@ -175,6 +178,7 @@ const Register: React.FC = () => {
                             Sign up
                         </Button>
                     </form>
+                    {message && <Typography color="textSecondary" sx={{ marginTop: 2 }}>{message}</Typography>}
                     <Typography> 
                         I already have an account 
                         <Link href="/login"> Sign In</Link>

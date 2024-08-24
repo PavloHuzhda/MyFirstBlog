@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MyFirstBlog.Contracts;
 using MyFirstBlog.Models;
 
 namespace MyFirstBlog.Controllers
@@ -18,24 +18,41 @@ namespace MyFirstBlog.Controllers
         public BlogController(BlogContext context, UserManager<User> userManager)
         {
             _blogContext = context;
-            _userManager = userManager;            
+            _userManager = userManager;
         }
 
-        [HttpGet]        
-        public async Task<ActionResult<IEnumerable<BlogPost>>> GetBlogPosts(int pageNum = 1, int pageSize = 3) 
+        [HttpGet]
+        public async Task<ActionResult<PagedResponse<BlogPost>>> GetBlogPosts(
+            int pageNum = 1,
+            int pageSize = 3,
+            string? search = null,
+            string? sortBy = "createdDate",
+            string? sortDirection = "asc")
         {
             var user = await _userManager.GetUserAsync(User);
-            var pagedBlogPosts = await _blogContext.BlogPosts
-                .Where(post => post.IdUser == user.Id) // Filter by user ID
+
+            var query = _blogContext.BlogPosts
+                .Where(post => post.IdUser == user.Id);
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(post => post.Title.Contains(search) || post.Content.Contains(search));
+            }
+
+            query = sortBy switch
+            {
+                "title" => sortDirection == "asc" ? query.OrderBy(post => post.Title) : query.OrderByDescending(post => post.Title),
+                _ => sortDirection == "asc" ? query.OrderBy(post => post.CreatedDate) : query.OrderByDescending(post => post.CreatedDate),
+            };
+
+            var pagedBlogPosts = await query
                 .Skip((pageNum - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
-            var totalPosts = await _blogContext.BlogPosts
-                .Where(post => post.IdUser == user.Id) // Filter by user ID
-                .CountAsync();
+            var totalPosts = await query.CountAsync();
 
-            var response = new PagedModel<BlogPost>
+            var response = new PagedResponse<BlogPost>
             {
                 Data = pagedBlogPosts,
                 PageNumber = pageNum,
@@ -45,12 +62,13 @@ namespace MyFirstBlog.Controllers
             return Ok(response);
         }
 
+
         [HttpGet("{id}")]
-        public async Task<ActionResult<BlogPost>> GetBlogPost(Guid id) 
+        public async Task<ActionResult<BlogPost>> GetBlogPost(Guid id)
         {
             var blogPost = await _blogContext.BlogPosts.FindAsync(id);
 
-            if (blogPost == null) 
+            if (blogPost == null)
             {
                 return NotFound();
             }
@@ -59,11 +77,11 @@ namespace MyFirstBlog.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<BlogPost>> CreateBlogPost([FromBody] PostBlog postBlog) 
+        public async Task<ActionResult<BlogPost>> CreateBlogPost([FromBody] PostBlogRequest postBlog)
         {
             var user = await _userManager.GetUserAsync(User);
             var newPost = new BlogPost { Title = postBlog.Title, Content = postBlog.Content, CreatedDate = postBlog.CreatedAt, User = user, IdUser = user.Id };
-            
+
             try
             {
                 _blogContext.BlogPosts.Add(newPost);
@@ -73,13 +91,13 @@ namespace MyFirstBlog.Controllers
             }
             catch (Exception ex)
             {
-                
+
                 return StatusCode(500, ex);
             }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBlogPost(Guid id, [FromBody] UpdatePostBlog updatePostBlog)
+        public async Task<IActionResult> UpdateBlogPost(Guid id, [FromBody] UpdatePostBlogRequest updatePostBlog)
         {
             if (id != updatePostBlog.Id)
             {
@@ -128,18 +146,18 @@ namespace MyFirstBlog.Controllers
             return NoContent();
         }
 
-        private bool BlogPostExists(Guid blogId) 
+        private bool BlogPostExists(Guid blogId)
         {
             return _blogContext.BlogPosts.Any(b => b.Id == blogId);
         }
 
-        [HttpDelete]
+        [HttpDelete("{postId}")]
         public async Task<IActionResult> DeleteBlogPost(Guid postId)
         {
             var user = await _userManager.GetUserAsync(User);
             var blogPost = await _blogContext.BlogPosts.FindAsync(postId);
 
-            if(blogPost == null) { return NotFound(); }
+            if (blogPost == null) { return NotFound(); }
 
             if (blogPost.IdUser != user.Id) { return Forbid(); }
 

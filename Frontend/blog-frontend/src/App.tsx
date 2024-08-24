@@ -10,7 +10,8 @@ import Footer from './Components/Footer';
 import Logout from './Components/Logout';
 import PublicRoute from './Components/PublicRoute';
 import CreateBlog from './Components/CreateBlog';
-import { Header } from './Components/Header';
+import ForgotPassword from './Components/ForgotPassword';
+import ResetPassword from './Components/ResetPassword';
 
 const App: React.FC = () => {
   return (
@@ -23,19 +24,20 @@ const App: React.FC = () => {
             minHeight: '100vh',
           }}
         >
-          <Header />
-          <div style={{ marginTop: '64px', flexGrow: 1 }}> {/* Adjust marginTop to match header height */}
+          <div style={{ flexGrow: 1 }}>
             <Routes>
               {/* Public routes accessible without authentication */}
               <Route element={<PublicRoute />}>
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password/:token/:email" element={<ResetPassword />} />
               </Route>
 
               {/* Protected routes accessible only after authentication */}
               <Route element={<ProtectedRoute />}>
-                <Route path="/" element={<Home />} />
                 <Route path="/blogs" element={<BlogList />} />
+                <Route path="/" element={<Home />} />
                 <Route path="/create-blog" element={<CreateBlog />} />
                 <Route path="/logout" element={<Logout />} />
               </Route>

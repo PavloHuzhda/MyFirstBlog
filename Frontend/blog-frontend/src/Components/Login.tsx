@@ -25,8 +25,8 @@ const Login: React.FC = () => {
         try {
             const response = await axios.post('/api/account/login', {email, password});
             login(response.data.token);
-            console.log('Login successful', response.data);
-            navigate('/'); // Redirect to home after successful login
+            // console.log('Login successful', response.data);
+            navigate('/blogs'); // Redirect to home after successful login
         } catch (error) {
             console.error('Login failed', error);
             setError('Login failed. Please check your credentials.');
@@ -99,7 +99,7 @@ const Login: React.FC = () => {
                         </Button>
                     </form>
                     <Typography>
-                        <Link href="#" >Forgot password?</Link>                    
+                        <Link href="/forgot-password" >Forgot password?</Link>                    
                     </Typography>
                     <Typography> 
                         Don't have an account?

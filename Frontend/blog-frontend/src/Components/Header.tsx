@@ -1,17 +1,8 @@
-import { AppBar, Box, Button, InputBase, Menu, MenuItem, styled, Toolbar } from "@mui/material";
-import { Menu as MenuIcon } from "@mui/icons-material";
+import React, { useState } from "react";
+import { AppBar, Box, Button, Menu, styled, Toolbar } from "@mui/material";
 import { Link } from 'react-router-dom';
-import { useState } from "react";
 
-
-export const Header: React.FC = () => {
-
-    const StyledToolbar = styled(Toolbar)(
-        {
-            display: "flex",
-            justifyContent: "space-between",
-        }
-    );
+export const Header: React.FC = () => {   
 
     const LogoBox = styled(Box)({
         display: "flex",
@@ -21,29 +12,21 @@ export const Header: React.FC = () => {
     const MenuBox = styled(Box)({
         display: "flex",
         gap: 30,
-    });
-
-    const SearchBox = styled(Box)({
-        display: "flex",
-        gap: 5,
-    });
+    });    
 
     const MenuItems = [
-        { Name: "Home", Link: "/" },
-        { Name: "Logout", Link: "/logout" },
-        { Name: "Register", Link: "/register" },
-        { Name: "Login", Link: "/login" },
+        { Name: "Create my blog", Link: "/create-blog" },
     ];
 
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false);   
 
     return (
-        <AppBar sx={{ background: "black" }}>
-            <StyledToolbar>
+        <AppBar position="fixed" sx={{ background: "black" }} >
+            <Toolbar sx={{display: "flex", justifyContent: "space-between"}}>
                 <LogoBox>
                     <Button component={Link} to="/blogs" sx={{ color: "white" }}>MyBlog</Button>
                 </LogoBox>
-                <MenuBox sx={{ display: { xs: 'none', sm: 'none', md: 'flex' } }}>
+                <MenuBox autoFocus={false} sx={{ display: { xs: 'flex', sm: 'flex', md: 'flex' } }}>
                     {MenuItems.map((item) => (
                         <Button 
                             key={item.Name} 
@@ -59,21 +42,10 @@ export const Header: React.FC = () => {
                             {item.Name}
                         </Button>
                     ))}
-
-                </MenuBox>
-                <SearchBox>
-                    <InputBase placeholder="Search ...." sx={{ color: 'white' }} />
-                    <MenuIcon
-                        sx={{
-                            cursor: "pointer",
-                            color: 'white',
-                            display: { xs: 'block', sm: 'block', md: 'none' }
-                        }}
-                        onClick={() => setOpen(!open)}
-                    />
-                </SearchBox>
-            </StyledToolbar>
+                </MenuBox>                
+            </Toolbar>
             <Menu
+                disableAutoFocus={true}
                 id="demo-positioned-menu"
                 aria-labelledby="demo-positioned-button"
                 open={open}
@@ -87,19 +59,7 @@ export const Header: React.FC = () => {
                     horizontal: 'left',
                 }}
             >
-                <Box sx={{ width: 350, height: '90vh' }}>
-                    {MenuItems.map((item) => (
-                        <MenuItem 
-                            key={item.Name} 
-                            component={Link} 
-                            to={item.Link} 
-                            sx={{ cursor: "pointer" }}
-                        >
-                            {item.Name}
-                        </MenuItem>
-                    ))}
-                    <Button component={Link} to="/login" sx={{ variant: 'outlined' }}>LogButt</Button>
-                </Box>
+                
             </Menu>
         </AppBar>
     );

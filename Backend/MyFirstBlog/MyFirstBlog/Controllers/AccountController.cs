@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using MyFirstBlog.Contracts;
 using MyFirstBlog.Models;
+using MyFirstBlog.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -16,47 +18,65 @@ namespace MyFirstBlog.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IConfiguration _config;
+        private readonly IEmailService _emailService;
+
 
         public AccountController(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
-            IConfiguration configuration
+            IConfiguration configuration,
+            IEmailService emailService
             )
         {
             _config = configuration;
             _userManager = userManager;
             _signInManager = signInManager;
+            _emailService = emailService;
         }
 
         [HttpPost("Register")]
-        public async Task<IActionResult> Register([FromBody] RegisterModel registerModel)
+        public async Task<IActionResult> Register([FromBody] RegisterRequest registerRequest)
         {
-            var user = new User { UserName = registerModel.UserName, Email = registerModel.Email, FirstName = registerModel.FirstName, LastName = registerModel.LastName };
-            var result = await _userManager.CreateAsync(user, registerModel.Password);
+            var user = new User { FirstName = registerRequest.FirstName, LastName = registerRequest.LastName, UserName = registerRequest.UserName, Email = registerRequest.Email };
+            var result = await _userManager.CreateAsync(user, registerRequest.Password);
 
             if (result.Succeeded)
             {
-                return Ok(new { Result = "Registration successful" });
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token, email = user.Email }, Request.Scheme);
+
+                string message = $"<html><body><p>Please confirm your account by <a href='{confirmationLink}'>clicking here</a>.</p></body></html>";
+                await _emailService.SendEmailAsync(user.Email, "Confirm your email", message);
+
+                return Ok("Registration successful. Please check your email to confirm your account.");
             }
 
             return BadRequest(result.Errors);
         }
 
-        [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel loginModel) 
+        [HttpGet("confirm-email")]
+        public async Task<IActionResult> ConfirmEmail(string token, string email)
         {
-            //var result = await _signInManager.PasswordSignInAsync(loginModel.Email, loginModel.Password, false, false);
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return BadRequest("Invalid email address.");
+            }
 
-            //if (result.Succeeded)
-            //{
-            //    var user = await _userManager.FindByEmailAsync(loginModel.Email);
-            //    var token = GenerateJwtToken(user);
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+            {
+                return Ok("Email confirmed successfully!");
+            }
 
-            //    return Ok(new { Token = token });
-            //}
+            return BadRequest("Error confirming email.");
+        }
 
-            var user = await _userManager.FindByEmailAsync(loginModel.Email);
-            if (user != null && await _userManager.CheckPasswordAsync(user, loginModel.Password))
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest) 
+        {
+            var user = await _userManager.FindByEmailAsync(loginRequest.Email);
+            if (user != null && await _userManager.CheckPasswordAsync(user, loginRequest.Password))
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes(_config["Jwt:Key"]);
@@ -99,5 +119,42 @@ namespace MyFirstBlog.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+            {
+                return BadRequest("Invalid request.");
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var resetLink = Url.Action("ResetPassword", "Account", new { token, email = model.Email }, Request.Scheme);
+
+            // Send the reset link via email (configure your email service accordingly)
+            await _emailService.SendEmailAsync(model.Email, "Password Reset", $"Reset your password by clicking here: {resetLink}");
+
+            return Ok();
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                return BadRequest("Invalid request.");
+            }
+
+            var resetPassResult = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
+            if (!resetPassResult.Succeeded)
+            {
+                return BadRequest("Error resetting password.");
+            }
+
+            return Ok();
+        }
+
     }
 }

@@ -10,14 +10,25 @@ import {
   CircularProgress,
   Modal,
   TextField,
+  TablePagination,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
+  InputAdornment,
+  IconButton,
+  SelectChangeEvent,
+  InputBase
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../Contexts/AuthContext';
+import { Search as SearchIcon, Sort as SortIcon } from '@mui/icons-material';
 
 interface BlogPost {
   id: string;
   title: string;
   content: string;
+  createdDate: string;
 }
 
 const BlogList: React.FC = () => {
@@ -27,31 +38,72 @@ const BlogList: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(3);
+  const [totalCount, setTotalCount] = useState(0);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [sortOption, setSortOption] = useState<string>('createdDate');
+  const [sortDirection, setSortDirection] = useState<string>('asc');
   const { token } = useAuth();
 
   useEffect(() => {
-    const fetchBlogPosts = async () => {
-      setIsLoading(true);
-      try {
-        const response = await axios.get<{ data: BlogPost[] }>('/api/blog', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (response.data && Array.isArray(response.data.data)) {
-          setBlogPosts(response.data.data);
-        } else {
-          setError('Invalid data format received.');
-        }
-      } catch (error) {
-        setError('Error fetching blog posts.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchBlogPosts();
-  }, [token]);
+  }, [page, rowsPerPage, token, sortOption, sortDirection]);
+
+  const fetchBlogPosts = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get<{ data: BlogPost[]; totalCount: number }>('/api/blog', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          pageNum: page + 1, // page is zero-based, API expects 1-based
+          pageSize: rowsPerPage,
+          search: searchQuery, // Pass search query to API
+          sortBy: sortOption, // Pass sort option to API
+          sortDirection: sortDirection // Pass sort direction to API
+        },
+      });
+      if (response.data && Array.isArray(response.data.data)) {
+        setBlogPosts(response.data.data);
+        setTotalCount(response.data.totalCount);
+      } else {
+        setError('Invalid data format received.');
+      }
+    } catch (error: any) {
+      if (error.response?.status === 401) {
+        setError('Your session has expired. Please log in again.');
+        setTimeout(() => {
+          window.location.href = '/login'; // Redirect to login page after a short delay
+        }, 3000); // 3 seconds delay
+      } else {
+        setError('Error fetching blog posts: ' + error.message);
+      }
+    } finally {
+      setIsLoading(false);      
+    }
+  };
+
+  const handleSearchKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      fetchBlogPosts(); // Trigger search when "Enter" is pressed
+    }
+  };
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleSortChange = (event: SelectChangeEvent<string>) => {
+    setSortOption(event.target.value as string);
+    setPage(0); // Reset to the first page on a new sort option
+  };
+
+  const handleSortDirectionToggle = () => {
+    setSortDirection(prevDirection => (prevDirection === 'asc' ? 'desc' : 'asc'));
+    setPage(0); // Reset to the first page on a new sort direction
+  };
 
   const handleEditClick = (post: BlogPost) => {
     setEditingPost(post);
@@ -63,11 +115,13 @@ const BlogList: React.FC = () => {
       await axios.delete(`/api/blog/${postId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
       });
-      setBlogPosts(blogPosts.filter(post => post.id !== postId));
+      fetchBlogPosts();
     } catch (error) {
       setError("Error deleting the blog post.");
+      console.error("Error deleting the blog post:", error);
     }
   };
 
@@ -107,6 +161,15 @@ const BlogList: React.FC = () => {
     setExpandedPostId(expandedPostId === postId ? null : postId);
   };
 
+  const handleChangePage = (_event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+  
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0); // Reset page to 0 when rows per page changes
+  };
+
   if (isLoading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
@@ -121,6 +184,41 @@ const BlogList: React.FC = () => {
 
   return (
     <Box sx={{ padding: 3 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
+      <InputBase
+          id='outlined-basic'
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+          onKeyDown={handleSearchKeyDown} // Trigger search on Enter key press
+          startAdornment={(
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          )}
+          sx={{
+            width: '300px',
+            border: '1px solid #707070', // Change the border color to black
+            padding: '0 10px',
+            height: '40px',
+            borderRadius: '4px',
+            '&:focus-within': {border: '1px solid black'},
+          }}
+        />
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <FormControl variant="outlined" sx={{ minWidth: 120, marginRight: 2 }}>
+            <InputLabel>Sort By</InputLabel>
+            <Select value={sortOption} onChange={handleSortChange} label="Sort By" sx={{ height: '40px','&.Mui-focused': {borderColor: 'green', // Change border color to green on focus
+    }, '&:focus-within': {borderColor: 'black'} }}>
+              <MenuItem value="createdDate">Date</MenuItem>
+              <MenuItem value="title">Title</MenuItem>
+            </Select>
+          </FormControl>
+          <IconButton onClick={handleSortDirectionToggle}>
+            <SortIcon sx={{ transform: sortDirection === 'asc' ? 'rotate(0deg)' : 'rotate(180deg)' }} />
+          </IconButton>
+        </Box>
+      </Box>
       <Typography variant="h4" gutterBottom>
         My Blog Posts
       </Typography>
@@ -133,10 +231,13 @@ const BlogList: React.FC = () => {
                   <Typography variant="h5" component="div">
                     {blogPost.title}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 2 }}>
+                  <Typography variant="caption" color="text.secondary" sx={{ display: 'block', marginBottom: 1 }}>
+                    {new Date(blogPost.createdDate).toLocaleString()} {/* Formats the date */}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 2, whiteSpace: 'pre-line' }}>
                     {expandedPostId === blogPost.id
                       ? blogPost.content
-                      : `${blogPost.content.slice(0, 100)}${blogPost.content.length > 100 ? '...' : ''}`}
+                      : `${blogPost.content.slice(0, 10)}${blogPost.content.length > 10 ? '...' : ''}`}
                   </Typography>
                   {expandedPostId === blogPost.id && (
                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -170,6 +271,7 @@ const BlogList: React.FC = () => {
 
       {/* Edit Modal */}
       <Modal
+        disableAutoFocus
         open={isEditModalOpen}
         onClose={handleModalClose}
         aria-labelledby="edit-blog-modal"
@@ -221,6 +323,16 @@ const BlogList: React.FC = () => {
           )}
         </Box>
       </Modal>
+      {/* Pagination Component */}
+      <TablePagination
+        component="div"
+        count={totalCount}
+        page={page}
+        onPageChange={handleChangePage}
+        rowsPerPage={rowsPerPage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        rowsPerPageOptions={[3, 5, 10, 25]}
+      />
     </Box>
   );
 };
