@@ -75,7 +75,14 @@ namespace MyFirstBlog.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest) 
         {
-            var user = await _userManager.FindByEmailAsync(loginRequest.Email);
+            var user = await _userManager.FindByEmailAsync(loginRequest.UserNameOrEmail);
+
+            if (user == null)
+            {
+                // If not found by email, try to find by username
+                user = await _userManager.FindByNameAsync(loginRequest.UserNameOrEmail);
+            }
+
             if (user != null && await _userManager.CheckPasswordAsync(user, loginRequest.Password))
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
@@ -130,17 +137,27 @@ namespace MyFirstBlog.Controllers
             }
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var resetLink = Url.Action("ResetPassword", "Account", new { token, email = model.Email }, Request.Scheme);
 
-            // Send the reset link via email (configure your email service accordingly)
-            await _emailService.SendEmailAsync(model.Email, "Password Reset", $"Reset your password by clicking here: {resetLink}");
+
+            // Generate the URL with token and email as part of the route
+            //var resetLink = $"{Request.Scheme}://localhost:5173/reset-password/{Uri.EscapeDataString(token)}/{model.Email}";
+
+            var resetLink = Url.Action("ResetPassword", "account", new { token, email = user.Email }, Request.Scheme, Request.Host.ToString())
+            .Replace("https://localhost:7046/api/Account/reset-password?token=", "http://localhost:5173/reset-password/").Replace("&email=", "/");
+
+            // Send the reset link via email
+            await _emailService.SendEmailAsync(model.Email, "Password Reset", $"Reset your password by clicking here: <a href='{resetLink}'>clicking here</a>.");
 
             return Ok();
         }
 
+
+
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto model)
         {
+            
+
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
@@ -153,8 +170,9 @@ namespace MyFirstBlog.Controllers
                 return BadRequest("Error resetting password.");
             }
 
-            return Ok();
-        }
+            return Ok("Password has been reset successfully.");
+        }     
+
 
     }
 }

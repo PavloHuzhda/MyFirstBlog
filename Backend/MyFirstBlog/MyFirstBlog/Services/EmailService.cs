@@ -21,6 +21,11 @@ namespace MyFirstBlog.Services
             var plainTextContent = message;
             var htmlContent = message;
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+            // Disable click tracking
+            msg.TrackingSettings = new TrackingSettings
+            {
+                ClickTracking = new ClickTracking { Enable = false }
+            };
             var response = await client.SendEmailAsync(msg);
         }
     }

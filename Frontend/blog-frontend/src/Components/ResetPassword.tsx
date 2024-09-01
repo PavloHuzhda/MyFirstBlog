@@ -9,10 +9,21 @@ const ResetPassword = () => {
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
+  // Decode the email address to make it more readable
+  const decodedEmail = decodeURIComponent(email || ''); // Handle possible undefined with empty string fallback
+  const decodedToken = decodeURIComponent(token || ''); // Handle possible undefined with empty string fallback
+  console.log(token);
+  console.log(decodedToken);
+
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const response = await axios.post('/api/account/reset-password', { token, email, password });
+      console.log(token);
+
+      const response = await axios.post(`/api/account/reset-password`, { email, token, password });
+      console.log(response);
+
       setMessage('Password has been reset successfully.');
       navigate('/login');
     } catch (error) {
@@ -23,6 +34,9 @@ const ResetPassword = () => {
   return (
     <Box sx={{ maxWidth: 400, margin: 'auto', padding: 3 }}>
       <Typography variant="h4" gutterBottom>Reset Password</Typography>
+      <Typography variant="body1" gutterBottom>
+        Resetting password for: <strong>{decodedEmail}</strong>
+      </Typography>
       <form onSubmit={handleSubmit}>
         <TextField
           fullWidth

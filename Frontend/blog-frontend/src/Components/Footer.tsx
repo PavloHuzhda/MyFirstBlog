@@ -1,7 +1,6 @@
 import React from 'react';
-import { Box, Container, Typography, Link } from '@mui/material';
-import { useAuth } from '../Contexts/AuthContext';
-import { Link as RouterLink } from 'react-router-dom';
+import { Box, Container, Typography, Link, IconButton } from '@mui/material';
+import { GitHub, LinkedIn, Email, MailOutline } from '@mui/icons-material'; // Import icons from Material-UI
 
 function Copyright() {
   return (
@@ -17,7 +16,6 @@ function Copyright() {
 }
 
 const Footer: React.FC = () => {
-  const { token } = useAuth();
 
   return (
     <Box
@@ -33,14 +31,52 @@ const Footer: React.FC = () => {
       }}
     >
       <Container maxWidth="sm">
-        <Typography variant="body1">
-          My sticky footer can be found here.
-        </Typography>
-        {token && (
-          <Link component={RouterLink} to="/logout" color="inherit">
-            Logout
-          </Link>
-        )}
+        <Typography sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+          My social networks:
+        </Typography>        
+        {/* Social Media Icons */}
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+          {/* GitHub */}
+          <IconButton
+            component="a"
+            href="https://github.com/PavloDeveloper9"
+            target="_blank"
+            rel="noopener noreferrer"
+            color="inherit"
+          >
+            <GitHub />
+          </IconButton>
+
+          {/* LinkedIn */}
+          <IconButton
+            component="a"
+            href="https://www.linkedin.com/in/pavlo-huzhda-a62781172/"
+            target="_blank"
+            rel="noopener noreferrer"
+            color="inherit"
+          >
+            <LinkedIn />
+          </IconButton>
+
+          {/* Gmail */}
+          <IconButton
+            component="a"
+            href="mailto:pavlohuzhda@gmail.com"
+            color="inherit"
+          >
+            <Email />
+          </IconButton>
+
+          {/* Microsoft Mail */}
+          <IconButton
+            component="a"
+            href="mailto:pavlohuzhda@outlook.com"
+            color="inherit"
+          >
+            <MailOutline />
+          </IconButton>
+        </Box>
+
         <Copyright />
       </Container>
     </Box>

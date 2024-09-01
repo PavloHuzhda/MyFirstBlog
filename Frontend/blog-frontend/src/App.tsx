@@ -21,7 +21,7 @@ const App: React.FC = () => {
           style={{
             display: 'flex',
             flexDirection: 'column',
-            minHeight: '100vh',
+            minHeight: '98.3vh',
           }}
         >
           <div style={{ flexGrow: 1 }}>

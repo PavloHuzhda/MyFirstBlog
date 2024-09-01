@@ -17,8 +17,7 @@ import {
   InputLabel,
   InputAdornment,
   IconButton,
-  SelectChangeEvent,
-  InputBase
+  InputBase,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../Contexts/AuthContext';
@@ -62,7 +61,7 @@ const BlogList: React.FC = () => {
           pageSize: rowsPerPage,
           search: searchQuery, // Pass search query to API
           sortBy: sortOption, // Pass sort option to API
-          sortDirection: sortDirection // Pass sort direction to API
+          sortDirection: sortDirection, // Pass sort direction to API
         },
       });
       if (response.data && Array.isArray(response.data.data)) {
@@ -81,7 +80,7 @@ const BlogList: React.FC = () => {
         setError('Error fetching blog posts: ' + error.message);
       }
     } finally {
-      setIsLoading(false);      
+      setIsLoading(false);
     }
   };
 
@@ -101,7 +100,7 @@ const BlogList: React.FC = () => {
   };
 
   const handleSortDirectionToggle = () => {
-    setSortDirection(prevDirection => (prevDirection === 'asc' ? 'desc' : 'asc'));
+    setSortDirection((prevDirection) => (prevDirection === 'asc' ? 'desc' : 'asc'));
     setPage(0); // Reset to the first page on a new sort direction
   };
 
@@ -120,8 +119,8 @@ const BlogList: React.FC = () => {
       });
       fetchBlogPosts();
     } catch (error) {
-      setError("Error deleting the blog post.");
-      console.error("Error deleting the blog post:", error);
+      setError('Error deleting the blog post.');
+      console.error('Error deleting the blog post:', error);
     }
   };
 
@@ -132,30 +131,29 @@ const BlogList: React.FC = () => {
 
   const handleUpdatePost = async () => {
     if (!editingPost) return;
-    
+
     try {
       const payload = {
         id: editingPost.id,
         title: editingPost.title,
         content: editingPost.content,
       };
-  
+
       await axios.put(`/api/blog/${editingPost.id}`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       });
-  
-      setBlogPosts(blogPosts.map(post => (post.id === editingPost.id ? editingPost : post)));
+
+      setBlogPosts(blogPosts.map((post) => (post.id === editingPost.id ? editingPost : post)));
       handleModalClose();
     } catch (error) {
-      const err = error as any;  // Cast error to any
+      const err = error as any; // Cast error to any
       console.error('Error updating the blog post:', err.response?.data || err.message);
       setError('There was an issue updating your blog post. Please try again.');
     }
   };
-    
 
   const toggleExpandPost = (postId: string) => {
     setExpandedPostId(expandedPostId === postId ? null : postId);
@@ -164,7 +162,7 @@ const BlogList: React.FC = () => {
   const handleChangePage = (_event: unknown, newPage: number) => {
     setPage(newPage);
   };
-  
+
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0); // Reset page to 0 when rows per page changes
@@ -182,34 +180,63 @@ const BlogList: React.FC = () => {
     return <Typography color="error">{error}</Typography>;
   }
 
+  // If no blog posts are available, show only the message and button
+  if (blogPosts.length === 0) {
+    return (
+      <Box sx={{ textAlign: 'center', marginTop: 4 }}>
+        <Typography variant="h6">You have no posts.</Typography>
+        <Button
+          component={Link}
+          to="/create-blog"
+          variant="contained"
+          color="primary"
+          sx={{ marginTop: 2 }}
+        >
+          Create a Blog
+        </Button>
+      </Box>
+    );
+  }
+
   return (
     <Box sx={{ padding: 3 }}>
+      {/* Main content displayed only if there are posts */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
-      <InputBase
-          id='outlined-basic'
+        <InputBase
+          id="outlined-basic"
           placeholder="Search..."
           value={searchQuery}
           onChange={handleSearchChange}
           onKeyDown={handleSearchKeyDown} // Trigger search on Enter key press
-          startAdornment={(
+          startAdornment={
             <InputAdornment position="start">
               <SearchIcon />
             </InputAdornment>
-          )}
+          }
           sx={{
             width: '300px',
-            border: '1px solid #707070', // Change the border color to black
+            border: '1px solid #707070',
             padding: '0 10px',
             height: '40px',
             borderRadius: '4px',
-            '&:focus-within': {border: '1px solid black'},
+            '&:focus-within': { border: '1px solid black' },
           }}
         />
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <FormControl variant="outlined" sx={{ minWidth: 120, marginRight: 2 }}>
             <InputLabel>Sort By</InputLabel>
-            <Select value={sortOption} onChange={handleSortChange} label="Sort By" sx={{ height: '40px','&.Mui-focused': {borderColor: 'green', // Change border color to green on focus
-    }, '&:focus-within': {borderColor: 'black'} }}>
+            <Select
+              value={sortOption}
+              onChange={handleSortChange}
+              label="Sort By"
+              sx={{
+                height: '40px',
+                '&.Mui-focused': {
+                  borderColor: 'green', // Change border color to green on focus
+                },
+                '&:focus-within': { borderColor: 'black' },
+              }}
+            >
               <MenuItem value="createdDate">Date</MenuItem>
               <MenuItem value="title">Title</MenuItem>
             </Select>
@@ -223,50 +250,35 @@ const BlogList: React.FC = () => {
         My Blog Posts
       </Typography>
       <Grid container spacing={4}>
-        {blogPosts.length > 0 ? (
-          blogPosts.map((blogPost) => (
-            <Grid item xs={12} key={blogPost.id}>
-              <Card onClick={() => toggleExpandPost(blogPost.id)} sx={{ cursor: 'pointer' }}>
-                <CardContent>
-                  <Typography variant="h5" component="div">
-                    {blogPost.title}
-                  </Typography>
-                  <Typography variant="caption" color="text.secondary" sx={{ display: 'block', marginBottom: 1 }}>
-                    {new Date(blogPost.createdDate).toLocaleString()} {/* Formats the date */}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 2, whiteSpace: 'pre-line' }}>
-                    {expandedPostId === blogPost.id
-                      ? blogPost.content
-                      : `${blogPost.content.slice(0, 10)}${blogPost.content.length > 10 ? '...' : ''}`}
-                  </Typography>
-                  {expandedPostId === blogPost.id && (
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <Button variant="contained" color="primary" onClick={() => handleEditClick(blogPost)}>
-                        Edit
-                      </Button>
-                      <Button variant="contained" color="secondary" onClick={() => handleDeleteClick(blogPost.id)}>
-                        Delete
-                      </Button>
-                    </Box>
-                  )}
-                </CardContent>
-              </Card>
-            </Grid>
-          ))
-        ) : (
-          <Box sx={{ textAlign: 'center', marginTop: 4 }}>
-            <Typography>No blog posts available.</Typography>
-            <Button
-              component={Link}
-              to="/create-blog"
-              variant="contained"
-              color="primary"
-              sx={{ marginTop: 2 }}
-            >
-              Create a Blog
-            </Button>
-          </Box>
-        )}
+        {blogPosts.map((blogPost) => (
+          <Grid item xs={12} key={blogPost.id}>
+            <Card onClick={() => toggleExpandPost(blogPost.id)} sx={{ cursor: 'pointer' }}>
+              <CardContent>
+                <Typography variant="h5" component="div">
+                  {blogPost.title}
+                </Typography>
+                <Typography variant="caption" color="text.secondary" sx={{ display: 'block', marginBottom: 1 }}>
+                  {new Date(blogPost.createdDate).toLocaleString()} {/* Formats the date */}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 2, whiteSpace: 'pre-line' }}>
+                  {expandedPostId === blogPost.id
+                    ? blogPost.content
+                    : `${blogPost.content.slice(0, 10)}${blogPost.content.length > 10 ? '...' : ''}`}
+                </Typography>
+                {expandedPostId === blogPost.id && (
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Button variant="contained" color="primary" onClick={() => handleEditClick(blogPost)}>
+                      Edit
+                    </Button>
+                    <Button variant="contained" color="secondary" onClick={() => handleDeleteClick(blogPost.id)}>
+                      Delete
+                    </Button>
+                  </Box>
+                )}
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
       </Grid>
 
       {/* Edit Modal */}

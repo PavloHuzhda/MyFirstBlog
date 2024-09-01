@@ -13,7 +13,7 @@ const SigninPaper = styled(Paper)({
 }); 
 
 const Login: React.FC = () => {
-    const [email, setEmail] = useState<string>('');
+    const [userNameOrEmail, setUserNameOrEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string>('');
     const { login  } = useAuth();
@@ -23,7 +23,7 @@ const Login: React.FC = () => {
         event.preventDefault();
         setError(''); // Clear previous errors
         try {
-            const response = await axios.post('/api/account/login', {email, password});
+            const response = await axios.post('/api/account/login', {userNameOrEmail, password});
             login(response.data.token);
             // console.log('Login successful', response.data);
             navigate('/blogs'); // Redirect to home after successful login
@@ -54,16 +54,16 @@ const Login: React.FC = () => {
                     </Grid>
                     <form onSubmit={handleLogin}>
                         <TextField 
-                            id="email" 
-                            label="Email" 
+                            id="UserNameOrEmail" 
+                            label="Username or Email" 
                             variant="standard" 
-                            placeholder="Enter your email" 
+                            placeholder="Enter your username or email" 
                             fullWidth 
                             autoFocus 
                             autoComplete="email" 
                             required 
-                            value={email} 
-                            onChange={(e) => setEmail(e.target.value)}
+                            value={userNameOrEmail} 
+                            onChange={(e) => setUserNameOrEmail(e.target.value)}
                         />
                         <TextField 
                             id="password" 
