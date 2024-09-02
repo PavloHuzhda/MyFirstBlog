@@ -10,7 +10,12 @@ const ForgotPassword = () => {
     event.preventDefault();
     try {
       const response = await axios.post('/api/account/forgot-password', { email });
-      setMessage('A password reset link has been sent to your email.');
+      if (response.status === 200) {
+        setMessage('Error sending password reset email.');
+      }
+      else{
+        setMessage('A password reset link has been sent to your email.');
+      }
     } catch (error) {
       setMessage('Error sending password reset email.');
     }

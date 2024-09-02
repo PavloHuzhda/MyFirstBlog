@@ -1,33 +1,41 @@
 import React, { useState } from 'react';
 import { TextField, Button, Box, Typography } from '@mui/material';
 import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const ResetPassword = () => {
-  const { token, email } = useParams<{ token: string; email: string }>();
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
-
-  // Decode the email address to make it more readable
-  const decodedEmail = decodeURIComponent(email || ''); // Handle possible undefined with empty string fallback
-  const decodedToken = decodeURIComponent(token || ''); // Handle possible undefined with empty string fallback
-  console.log(token);
-  console.log(decodedToken);
-
+ 
+  const email = new URLSearchParams(window.location.search).get('email'); 
+  const token = new URLSearchParams(window.location.search).get('token');
+  
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      console.log(token);
+      if (!token || !email) {
+        setMessage("Invalid or missing token/email.");
+        return;
+      }
 
-      const response = await axios.post(`/api/account/reset-password`, { email, token, password });
-      console.log(response);
-
-      setMessage('Password has been reset successfully.');
-      navigate('/login');
+      const response = await axios.post(`/api/account/reset-password`, { 
+        email, 
+        token, 
+        password 
+      });
+      if (response.status === 200) {
+        setMessage('Error resetting password. Please ensure your token and email are correct.');
+      }
+      else{
+        setMessage('Password has been reset successfully.');
+        navigate('/login');
+      }
+      
     } catch (error) {
-      setMessage('Error resetting password.');
+      setMessage('Error resetting password. Please ensure your token and email are correct.');
+      console.error('Error during reset:', error);
     }
   };
 
@@ -35,7 +43,7 @@ const ResetPassword = () => {
     <Box sx={{ maxWidth: 400, margin: 'auto', padding: 3 }}>
       <Typography variant="h4" gutterBottom>Reset Password</Typography>
       <Typography variant="body1" gutterBottom>
-        Resetting password for: <strong>{decodedEmail}</strong>
+        Resetting password for: <strong>{email}</strong>
       </Typography>
       <form onSubmit={handleSubmit}>
         <TextField

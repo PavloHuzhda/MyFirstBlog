@@ -43,7 +43,8 @@ namespace MyFirstBlog.Controllers
             if (result.Succeeded)
             {
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token, email = user.Email }, Request.Scheme);
+                var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token, email = user.Email }, Request.Scheme)
+                    .Replace("https://localhost:7046/api/Account/confirm-email", "http://localhost:5173/confirm-email");
 
                 string message = $"<html><body><p>Please confirm your account by <a href='{confirmationLink}'>clicking here</a>.</p></body></html>";
                 await _emailService.SendEmailAsync(user.Email, "Confirm your email", message);
@@ -73,59 +74,48 @@ namespace MyFirstBlog.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest) 
+        public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
         {
-            var user = await _userManager.FindByEmailAsync(loginRequest.UserNameOrEmail);
+            var user = await _userManager.FindByEmailAsync(loginRequest.UserNameOrEmail)
+                       ?? await _userManager.FindByNameAsync(loginRequest.UserNameOrEmail); // Check by email or username
 
-            if (user == null)
+            if (user == null || !await _userManager.CheckPasswordAsync(user, loginRequest.Password))
             {
-                // If not found by email, try to find by username
-                user = await _userManager.FindByNameAsync(loginRequest.UserNameOrEmail);
+                return Unauthorized("Invalid credentials.");
             }
 
-            if (user != null && await _userManager.CheckPasswordAsync(user, loginRequest.Password))
+            if (!await _userManager.IsEmailConfirmedAsync(user))
             {
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(_config["Jwt:Key"]);
-                var tokenDescriptor = new SecurityTokenDescriptor
+                // Resend confirmation email
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token, email = user.Email }, Request.Scheme)
+                    .Replace("https://localhost:7046/api/Account/confirm-email", "http://localhost:5173/confirm-email");
+
+                string message = $"<html><body><p>Please confirm your account by <a href='{confirmationLink}'>clicking here</a>.</p></body></html>";
+                await _emailService.SendEmailAsync(user.Email, "Confirm your email", message);
+
+                return BadRequest("Your email has not been confirmed. A new confirmation email has been sent to your address.");
+            }
+
+            // Generate JWT token for the user as before
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_config["Jwt:Key"]);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
                 {
-                    Subject = new ClaimsIdentity(new Claim[]
-                    {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.UserName)
-                    }),
-                    Expires = DateTime.UtcNow.AddHours(1),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
-                    Issuer = _config["Jwt:Issuer"],
-                    Audience = _config["Jwt:Issuer"]
-                };
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-                return Ok(new { Token = tokenHandler.WriteToken(token) });
-            }
-
-            return Unauthorized();
-        }
-
-        private string GenerateJwtToken(User user) 
-        {
-            var claims = new[]
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Name, user.UserName)
+                }),
+                Expires = DateTime.UtcNow.AddHours(1),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                Issuer = _config["Jwt:Issuer"],
+                Audience = _config["Jwt:Issuer"]
             };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(
-                issuer: _config["Jwt:Issuer"],
-                audience: _config["Jwt:Issuer"],
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
-                signingCredentials: creds);
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            var tokenJWT = tokenHandler.CreateToken(tokenDescriptor);
+            return Ok(new { Token = tokenHandler.WriteToken(tokenJWT) });
         }
+
 
         [HttpPost("forgot-password")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto model)
@@ -143,7 +133,7 @@ namespace MyFirstBlog.Controllers
             //var resetLink = $"{Request.Scheme}://localhost:5173/reset-password/{Uri.EscapeDataString(token)}/{model.Email}";
 
             var resetLink = Url.Action("ResetPassword", "account", new { token, email = user.Email }, Request.Scheme, Request.Host.ToString())
-            .Replace("https://localhost:7046/api/Account/reset-password?token=", "http://localhost:5173/reset-password/").Replace("&email=", "/");
+            .Replace("https://localhost:7046/api/Account/reset-password", "http://localhost:5173/reset-password");
 
             // Send the reset link via email
             await _emailService.SendEmailAsync(model.Email, "Password Reset", $"Reset your password by clicking here: <a href='{resetLink}'>clicking here</a>.");
@@ -167,7 +157,9 @@ namespace MyFirstBlog.Controllers
             var resetPassResult = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
             if (!resetPassResult.Succeeded)
             {
-                return BadRequest("Error resetting password.");
+                // Detailed error messages for better debugging
+                var errors = string.Join(", ", resetPassResult.Errors.Select(e => e.Description));
+                return BadRequest($"Error resetting password: {errors}");
             }
 
             return Ok("Password has been reset successfully.");

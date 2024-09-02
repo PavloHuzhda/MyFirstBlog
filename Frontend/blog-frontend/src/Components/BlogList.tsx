@@ -13,6 +13,7 @@ import {
   TablePagination,
   MenuItem,
   Select,
+  SelectChangeEvent,
   FormControl,
   InputLabel,
   InputAdornment,
@@ -336,15 +337,17 @@ const BlogList: React.FC = () => {
         </Box>
       </Modal>
       {/* Pagination Component */}
-      <TablePagination
-        component="div"
-        count={totalCount}
-        page={page}
-        onPageChange={handleChangePage}
-        rowsPerPage={rowsPerPage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        rowsPerPageOptions={[3, 5, 10, 25]}
-      />
+      {totalCount > rowsPerPage && (
+        <TablePagination
+          component="div"
+          count={totalCount}
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          rowsPerPageOptions={[3, 5, 10, 25]}
+        />
+      )}
     </Box>
   );
 };

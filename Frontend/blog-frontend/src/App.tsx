@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, BrowserRouter as Router, Routes, Navigate } from 'react-router-dom';
 import BlogList from './Components/BlogList';
-import Home from './Components/Home';
 import Register from './Components/Register';
 import Login from './Components/Login';
 import ProtectedRoute from './Components/ProtectedRoute';
@@ -12,6 +11,7 @@ import PublicRoute from './Components/PublicRoute';
 import CreateBlog from './Components/CreateBlog';
 import ForgotPassword from './Components/ForgotPassword';
 import ResetPassword from './Components/ResetPassword';
+import ConfirmEmailPage from './Components/ConfirmEmailPage';
 
 const App: React.FC = () => {
   return (
@@ -30,16 +30,17 @@ const App: React.FC = () => {
               <Route element={<PublicRoute />}>
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/confirm-email" element={<ConfirmEmailPage />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/reset-password/:token/:email" element={<ResetPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
               </Route>
 
               {/* Protected routes accessible only after authentication */}
               <Route element={<ProtectedRoute />}>
                 <Route path="/blogs" element={<BlogList />} />
-                <Route path="/" element={<Home />} />
                 <Route path="/create-blog" element={<CreateBlog />} />
                 <Route path="/logout" element={<Logout />} />
+                <Route path="*" element={<BlogList />} />
               </Route>
 
               {/* Catch-all route for non-authenticated users trying to access protected routes */}
