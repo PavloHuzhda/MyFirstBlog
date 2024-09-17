@@ -3,24 +3,23 @@
   "WorkspaceRootPath": "C:\\Users\\footb\\source\\repos\\MyFirstBlog\\Backend\\MyFirstBlog\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D42428DC-E6BC-46FB-ABAF-CDFD403128F2}|MyFirstBlog\\MyFirstBlog.csproj|c:\\users\\footb\\source\\repos\\myfirstblog\\backend\\myfirstblog\\myfirstblog\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{D42428DC-E6BC-46FB-ABAF-CDFD403128F2}|MyFirstBlog\\MyFirstBlog.csproj|solutionrelative:myfirstblog\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{D42428DC-E6BC-46FB-ABAF-CDFD403128F2}|MyFirstBlog\\MyFirstBlog.csproj|c:\\users\\footb\\source\\repos\\myfirstblog\\backend\\myfirstblog\\myfirstblog\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D42428DC-E6BC-46FB-ABAF-CDFD403128F2}|MyFirstBlog\\MyFirstBlog.csproj|solutionrelative:myfirstblog\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D42428DC-E6BC-46FB-ABAF-CDFD403128F2}|MyFirstBlog\\MyFirstBlog.csproj|c:\\users\\footb\\source\\repos\\myfirstblog\\backend\\myfirstblog\\myfirstblog\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D42428DC-E6BC-46FB-ABAF-CDFD403128F2}|MyFirstBlog\\MyFirstBlog.csproj|solutionrelative:myfirstblog\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{D42428DC-E6BC-46FB-ABAF-CDFD403128F2}|MyFirstBlog\\MyFirstBlog.csproj|c:\\users\\footb\\source\\repos\\myfirstblog\\backend\\myfirstblog\\myfirstblog\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{D42428DC-E6BC-46FB-ABAF-CDFD403128F2}|MyFirstBlog\\MyFirstBlog.csproj|solutionrelative:myfirstblog\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D42428DC-E6BC-46FB-ABAF-CDFD403128F2}|MyFirstBlog\\MyFirstBlog.csproj|c:\\users\\footb\\source\\repos\\myfirstblog\\backend\\myfirstblog\\myfirstblog\\contracts\\resetpassworddto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D42428DC-E6BC-46FB-ABAF-CDFD403128F2}|MyFirstBlog\\MyFirstBlog.csproj|solutionrelative:myfirstblog\\contracts\\resetpassworddto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Sdks\\Microsoft.Docker.Sdk\\build\\Microsoft.VisualStudio.Docker.Compose.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D42428DC-E6BC-46FB-ABAF-CDFD403128F2}|MyFirstBlog\\MyFirstBlog.csproj|c:\\users\\footb\\source\\repos\\myfirstblog\\backend\\myfirstblog\\myfirstblog\\contracts\\loginrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D42428DC-E6BC-46FB-ABAF-CDFD403128F2}|MyFirstBlog\\MyFirstBlog.csproj|solutionrelative:myfirstblog\\contracts\\loginrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{CAF926F5-C2E4-4B3F-BE11-EBAC1C53DA31}|docker-compose.dcproj|c:\\users\\footb\\source\\repos\\myfirstblog\\backend\\myfirstblog\\docker-compose.dcproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{CAF926F5-C2E4-4B3F-BE11-EBAC1C53DA31}|docker-compose.dcproj|solutionrelative:docker-compose.dcproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D42428DC-E6BC-46FB-ABAF-CDFD403128F2}|MyFirstBlog\\MyFirstBlog.csproj|c:\\users\\footb\\source\\repos\\myfirstblog\\backend\\myfirstblog\\myfirstblog\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D42428DC-E6BC-46FB-ABAF-CDFD403128F2}|MyFirstBlog\\MyFirstBlog.csproj|solutionrelative:myfirstblog\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{CAF926F5-C2E4-4B3F-BE11-EBAC1C53DA31}|docker-compose.dcproj|c:\\users\\footb\\source\\repos\\myfirstblog\\backend\\myfirstblog\\docker-compose.yml||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{CAF926F5-C2E4-4B3F-BE11-EBAC1C53DA31}|docker-compose.dcproj|solutionrelative:docker-compose.yml||{8B382828-6202-11D1-8870-0000F87579D2}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,72 +29,77 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ResetPasswordDto.cs",
-              "DocumentMoniker": "C:\\Users\\footb\\source\\repos\\MyFirstBlog\\Backend\\MyFirstBlog\\MyFirstBlog\\Contracts\\ResetPasswordDto.cs",
-              "RelativeDocumentMoniker": "MyFirstBlog\\Contracts\\ResetPasswordDto.cs",
-              "ToolTip": "C:\\Users\\footb\\source\\repos\\MyFirstBlog\\Backend\\MyFirstBlog\\MyFirstBlog\\Contracts\\ResetPasswordDto.cs",
-              "RelativeToolTip": "MyFirstBlog\\Contracts\\ResetPasswordDto.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAA9AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-01T15:47:59.445Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "LoginRequest.cs",
-              "DocumentMoniker": "C:\\Users\\footb\\source\\repos\\MyFirstBlog\\Backend\\MyFirstBlog\\MyFirstBlog\\Contracts\\LoginRequest.cs",
-              "RelativeDocumentMoniker": "MyFirstBlog\\Contracts\\LoginRequest.cs",
-              "ToolTip": "C:\\Users\\footb\\source\\repos\\MyFirstBlog\\Backend\\MyFirstBlog\\MyFirstBlog\\Contracts\\LoginRequest.cs",
-              "RelativeToolTip": "MyFirstBlog\\Contracts\\LoginRequest.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-27T10:53:31.435Z"
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\footb\\source\\repos\\MyFirstBlog\\Backend\\MyFirstBlog\\MyFirstBlog\\appsettings.json",
-              "RelativeDocumentMoniker": "MyFirstBlog\\appsettings.json",
-              "ToolTip": "C:\\Users\\footb\\source\\repos\\MyFirstBlog\\Backend\\MyFirstBlog\\MyFirstBlog\\appsettings.json",
-              "RelativeToolTip": "MyFirstBlog\\appsettings.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAAAEAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-08-24T16:29:23.868Z",
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\footb\\source\\repos\\MyFirstBlog\\Backend\\MyFirstBlog\\MyFirstBlog\\Program.cs",
+              "RelativeDocumentMoniker": "MyFirstBlog\\Program.cs",
+              "ToolTip": "C:\\Users\\footb\\source\\repos\\MyFirstBlog\\Backend\\MyFirstBlog\\MyFirstBlog\\Program.cs",
+              "RelativeToolTip": "MyFirstBlog\\Program.cs",
+              "ViewState": "AQIAACsAAAAAAAAAAAAgwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-17T10:23:47.584Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "docker-compose.dcproj",
+              "DocumentMoniker": "C:\\Users\\footb\\source\\repos\\MyFirstBlog\\Backend\\MyFirstBlog\\docker-compose.dcproj",
+              "RelativeDocumentMoniker": "docker-compose.dcproj",
+              "ToolTip": "C:\\Users\\footb\\source\\repos\\MyFirstBlog\\Backend\\MyFirstBlog\\docker-compose.dcproj",
+              "RelativeToolTip": "docker-compose.dcproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAABTAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-09-15T17:34:09.456Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Microsoft.VisualStudio.Docker.Compose.targets",
+              "DocumentMoniker": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Sdks\\Microsoft.Docker.Sdk\\build\\Microsoft.VisualStudio.Docker.Compose.targets",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Sdks\\Microsoft.Docker.Sdk\\build\\Microsoft.VisualStudio.Docker.Compose.targets",
+              "ToolTip": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Sdks\\Microsoft.Docker.Sdk\\build\\Microsoft.VisualStudio.Docker.Compose.targets",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Sdks\\Microsoft.Docker.Sdk\\build\\Microsoft.VisualStudio.Docker.Compose.targets",
+              "ViewState": "AQIAACACAAAAAAAAAAAjwDICAAAEAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
+              "WhenOpened": "2024-09-15T17:31:47.475Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "EmailService.cs",
-              "DocumentMoniker": "C:\\Users\\footb\\source\\repos\\MyFirstBlog\\Backend\\MyFirstBlog\\MyFirstBlog\\Services\\EmailService.cs",
-              "RelativeDocumentMoniker": "MyFirstBlog\\Services\\EmailService.cs",
-              "ToolTip": "C:\\Users\\footb\\source\\repos\\MyFirstBlog\\Backend\\MyFirstBlog\\MyFirstBlog\\Services\\EmailService.cs",
-              "RelativeToolTip": "MyFirstBlog\\Services\\EmailService.cs",
-              "ViewState": "AQIAAAYAAAAAAAAAAAAAABsAAAAOAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-24T16:28:40.209Z"
+              "Title": "docker-compose.yml",
+              "DocumentMoniker": "C:\\Users\\footb\\source\\repos\\MyFirstBlog\\Backend\\MyFirstBlog\\docker-compose.yml",
+              "RelativeDocumentMoniker": "docker-compose.yml",
+              "ToolTip": "C:\\Users\\footb\\source\\repos\\MyFirstBlog\\Backend\\MyFirstBlog\\docker-compose.yml",
+              "RelativeToolTip": "docker-compose.yml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
+              "WhenOpened": "2024-09-15T17:26:08.764Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "AccountController.cs",
-              "DocumentMoniker": "C:\\Users\\footb\\source\\repos\\MyFirstBlog\\Backend\\MyFirstBlog\\MyFirstBlog\\Controllers\\AccountController.cs",
-              "RelativeDocumentMoniker": "MyFirstBlog\\Controllers\\AccountController.cs",
-              "ToolTip": "C:\\Users\\footb\\source\\repos\\MyFirstBlog\\Backend\\MyFirstBlog\\MyFirstBlog\\Controllers\\AccountController.cs",
-              "RelativeToolTip": "MyFirstBlog\\Controllers\\AccountController.cs",
-              "ViewState": "AQIAAGIAAAAAAAAAAAAcwFsAAAB3AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-02T00:22:33.099Z",
+              "Title": "Dockerfile",
+              "DocumentMoniker": "C:\\Users\\footb\\source\\repos\\MyFirstBlog\\Backend\\MyFirstBlog\\MyFirstBlog\\Dockerfile",
+              "RelativeDocumentMoniker": "MyFirstBlog\\Dockerfile",
+              "ToolTip": "C:\\Users\\footb\\source\\repos\\MyFirstBlog\\Backend\\MyFirstBlog\\MyFirstBlog\\Dockerfile",
+              "RelativeToolTip": "MyFirstBlog\\Dockerfile",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABgAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-09-02T23:43:28.801Z",
               "EditorCaption": ""
             }
           ]

@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <History>False|2024-09-15T22:47:07.3829011Z||;False|2024-09-15T16:06:41.8873390-06:00||;False|2024-09-15T15:56:33.0092136-06:00||;False|2024-09-15T15:51:11.5838046-06:00||;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DataBase">
+      <Value>133dc94a-bcf5-48f5-b548-9ab1f2982213</Value>
+    </DestinationConnectionStrings>
+    <DestinationConnectionStrings Include="Kestrel:Certificates:Development:Password">
+      <Value>133dc94a-bcf5-48f5-b548-9ab1f2982213</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+  <ItemGroup>
+    <EFMigrations Include="MyFirstBlog.Models.BlogContext">
+      <Value>133dc94a-bcf5-48f5-b548-9ab1f2982213</Value>
+    </EFMigrations>
+  </ItemGroup>
+</Project>

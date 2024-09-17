@@ -10,7 +10,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["MyFirstBlog/MyFirstBlog.csproj", "MyFirstBlog/"]
-RUN dotnet restore "./MyFirstBlog/MyFirstBlog.csproj"
+RUN dotnet restore "MyFirstBlog/MyFirstBlog.csproj"
 COPY . .
 WORKDIR "/src/MyFirstBlog"
 RUN dotnet build "./MyFirstBlog.csproj" -c $BUILD_CONFIGURATION -o /app/build

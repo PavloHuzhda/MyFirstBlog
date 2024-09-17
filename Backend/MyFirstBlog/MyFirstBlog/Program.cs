@@ -59,7 +59,7 @@ namespace MyFirstBlog
             {
                 options.AddPolicy("AllowSpecificOrigin",
                     builder => builder
-                        .WithOrigins("http://localhost:5173") // Add your frontend URL here
+                        .WithOrigins("http://localhost:3000") // Add your frontend URL here
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials());
@@ -104,10 +104,14 @@ namespace MyFirstBlog
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                    // Optional: Customize the Swagger UI route and settings
+                });
             }
             // Enable CORS globally
             app.UseCors("AllowSpecificOrigin");

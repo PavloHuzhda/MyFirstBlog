@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://localhost:7046', // Your backend API URL
+        target: 'https://localhost:55865', // Your backend API URL
         changeOrigin: true,
         secure: false,
       },

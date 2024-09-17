@@ -4,7 +4,7 @@
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
     <DockerPublishLocally>False</DockerPublishLocally>
-    <ProjectGuid>f7d80af9-9f14-4a10-989f-c7f2d447b6cb</ProjectGuid>
+    <ProjectGuid>caf926f5-c2e4-4b3f-be11-ebac1c53da31</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
     <DockerServiceName>myfirstblog</DockerServiceName>
