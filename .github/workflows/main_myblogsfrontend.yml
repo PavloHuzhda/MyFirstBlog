@@ -27,7 +27,7 @@ jobs:
         working-directory: 'Frontend/blog-frontend'  # Path to your frontend app
 
       - name: Zip the build folder for deployment
-        run: zip -r release.zip ./Frontend/blog-frontend/build  # Ensure you're zipping the correct build folder (usually 'build' or 'dist')
+        run: zip -r release.zip ./Frontend/blog-frontend/dist  # Ensure you're zipping the correct build folder (usually 'build' or 'dist')
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -57,5 +57,5 @@ jobs:
         with:
           app-name: 'myblogsfrontend'  # Your Azure Web App name
           slot-name: 'Production'
-          package: './Frontend/blog-frontend/build'  # Path to the React build folder
+          package: './Frontend/blog-frontend/dist'  # Path to the React build folder
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_86556FDE771B42749151369FCE6DD01E }}
