@@ -2,7 +2,7 @@ import { PersonAdd } from "@mui/icons-material";
 import { Avatar, Button, Checkbox, FormControlLabel, Grid, Link, Paper, styled, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 const SignupPaper = styled(Paper)({
     padding: "30px 20px",
@@ -20,7 +20,7 @@ const Register: React.FC = () => {
     const [termsAccepted, setTermsAccepted] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
     const [message, setMessage] = useState('');
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
