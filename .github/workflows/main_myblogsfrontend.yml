@@ -57,5 +57,5 @@ jobs:
         with:
           app-name: 'myblogsfrontend'  # Your Azure Web App name
           slot-name: 'Production'
-          package: './Frontend/blog-frontend/dist'  # Path to the React build folder
+          package: './Frontend/blog-frontend/build'  # Path to the React build folder
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_86556FDE771B42749151369FCE6DD01E }}
